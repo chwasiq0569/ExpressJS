@@ -7,6 +7,13 @@ const courses = [
   { id: 2, course: "course2" },
   { id: 3, course: "course3" },
 ];
+const validateCourse = (course) => {
+  const schema = {
+    course: Joi.string().min(3).required(),
+  };
+  const result = Joi.validate(course, schema);
+  return result;
+};
 
 app.use(express.json()); //middleware
 
@@ -28,10 +35,7 @@ app.put("/api/course/:id", (req, res) => {
   );
   if (!course) res.status(404).send("Not Found!!!");
 
-  const schema = {
-    course: Joi.string().min(3).required(),
-  };
-  const result = Joi.validate(req.body, schema);
+  const result = validateCourse(req.body);
   if (result.error) {
     res.status(400).send(result.error.details[0].message);
     return;
@@ -42,10 +46,7 @@ app.put("/api/course/:id", (req, res) => {
 });
 
 app.post("/api/courses", (req, res) => {
-  const schema = {
-    course: Joi.string().min(3).required(),
-  };
-  const result = Joi.validate(req.body, schema);
+  const result = validateCourse(req.body);
   const course = {
     id: courses.length + 1,
     course: req.body.course,
