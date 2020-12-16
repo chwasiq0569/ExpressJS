@@ -10,11 +10,8 @@ const courses = [
 
 app.use(express.json()); //middleware
 
-app.get("/", (req, res) => {
-  res.send("Hello World!!!");
-});
 app.get("/api/courses", (req, res) => {
-  res.send([1, 2, 3]);
+  res.send(courses);
 });
 
 app.get("/api/course/:id", (req, res) => {
@@ -22,6 +19,25 @@ app.get("/api/course/:id", (req, res) => {
     (course) => course.id === parseInt(req.params.id)
   );
   if (!course) res.status(404).send("This Corse is not available");
+  res.send(course);
+});
+
+app.put("/api/course/:id", (req, res) => {
+  const course = courses.find(
+    (course) => course.id === parseInt(req.params.id)
+  );
+  if (!course) res.status(404).send("Not Found!!!");
+
+  const schema = {
+    course: Joi.string().min(3).required(),
+  };
+  const result = Joi.validate(req.body, schema);
+  if (result.error) {
+    res.status(400).send(result.error.details[0].message);
+    return;
+  }
+
+  course.course = req.body.course;
   res.send(course);
 });
 
@@ -35,23 +51,12 @@ app.post("/api/courses", (req, res) => {
     course: req.body.course,
   };
   if (result.error) {
-    res.status(400).send("Invalid Input");
+    res.status(400).send(result.error.details[0].message);
     return;
   }
   courses.push(course);
   res.send(course);
 });
-
-// app.get("/api/posts/:year/:month", (req, res) => {
-//   //parameters
-//   //queryString optional ?sortBy=name
-//   res.send(req.params);
-//   //   res.send(req.query);
-// });
-// app.get("/api/posts/:year/:month", (req, res) => {
-//   //queryString optional
-//   res.send(req.params.query);
-// });
 
 const port = process.env.PORT || 3000;
 
