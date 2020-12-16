@@ -1,5 +1,5 @@
 const express = require("express");
-
+const Joi = require("joi");
 const app = express();
 
 const courses = [
@@ -26,11 +26,15 @@ app.get("/api/course/:id", (req, res) => {
 });
 
 app.post("/api/courses", (req, res) => {
+  const schema = {
+    course: Joi.string().min(3).required(),
+  };
+  const result = Joi.validate(req.body, schema);
   const course = {
     id: courses.length + 1,
     course: req.body.course,
   };
-  if (req.body.course.length < 3 || !req.body.course) {
+  if (result.error) {
     res.status(400).send("Invalid Input");
     return;
   }
