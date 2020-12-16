@@ -1,4 +1,5 @@
 const express = require("express");
+
 const app = express();
 
 const courses = [
@@ -29,6 +30,10 @@ app.post("/api/courses", (req, res) => {
     id: courses.length + 1,
     course: req.body.course,
   };
+  if (req.body.course.length < 3 || !req.body.course) {
+    res.status(400).send("Invalid Input");
+    return;
+  }
   courses.push(course);
   res.send(course);
 });
