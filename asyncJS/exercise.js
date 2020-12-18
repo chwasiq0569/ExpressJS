@@ -31,13 +31,14 @@ function getTopMovies() {
 function sendEmail(email, movies) {
   return new Promise((resolve, reject) => {
     setTimeout(() => {
-      resolve("Send Email");
+      resolve("Email Sent...");
     }, 2000);
   });
 }
 // getCustomer(1)
 //   .then((customer) => {
 //     console.log("Customer: ", customer);
+// if(customer.isGold){
 //     getTopMovies(customer.isGold)
 //       .then((movies) => {
 //         console.log("Movies: ", movies);
@@ -46,16 +47,19 @@ function sendEmail(email, movies) {
 //           .catch((err) => console.log("Err in sendEmail: ", err));
 //       })
 //       .catch((err) => console.log("Err in getMovies: ", err));
+// }
 //   })
 //   .catch((err) => console.log("Err in getCustomer: ", err));
 
 const exercise = async () => {
   const customer = await getCustomer(1);
   console.log("Customer: ", customer);
-  const movies = await getTopMovies(customer.isGold);
-  console.log("Movies: ", movies);
-  const sentEmail = await sendEmail();
-  console.log(sentEmail);
+  if (customer.isGold) {
+    const movies = await getTopMovies(customer.isGold);
+    console.log("Movies: ", movies);
+    const sentEmail = await sendEmail();
+    console.log(sentEmail);
+  }
 };
 
 exercise();
