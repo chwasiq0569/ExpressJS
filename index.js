@@ -1,7 +1,12 @@
+const config = require("config");
 const express = require("express");
 const Joi = require("joi");
 const app = express();
-
+const helmet = require("helmet");
+const morgan = require("morgan");
+const {
+  default: contentSecurityPolicy,
+} = require("helmet/dist/middlewares/content-security-policy");
 const courses = [
   { id: 1, course: "course1" },
   { id: 2, course: "course2" },
@@ -15,18 +20,26 @@ const validateCourse = (course) => {
   const result = Joi.validate(course, schema);
   return result;
 };
+console.log(`Configuration Name: ${config.get("name")}`);
+console.log(`Mail: ${config.get("mail.host")}`);
+////////////////////////////////////////////////////////////
+console.log(`process.env.NODE_ENV: ${process.env.NODE_ENV}`);
+console.log(`app.get('env'): ${app.get("env")}`);
 
-console.log(`NODE_ENV: ${process.env.NODE_ENV}`);
-console.log(`app: ${app.get("env")}`);
-if (app.get("env")) {
-  app.use((req, res, next) => {
-    console.log("Custom Middleware");
-    next();
-  });
-}
+// if (app.get("env")) {
+//   app.use((req, res, next) => {
+//     console.log("Custom Middleware");
+//     next();
+//   });
+// }
 
 app.use(express.json()); //middleware
 app.use(express.urlencoded({ extended: true })); //middleware
+app.use(helmet());
+
+if (app.get("env") === "development") {
+  app.use(morgan("tiny"));
+}
 
 app.get("/api/courses", (req, res) => {
   res.send(courses);
