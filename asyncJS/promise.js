@@ -50,3 +50,6 @@ getUser(1)
       .catch((err) => console.log("Error Getting Repos: ", err));
   })
   .catch((err) => console.log("Error Getting User: ", err));
+
+///////we can also do Promise.reject(new Error())
+//in above case of promises web awaiting of first promise result to run 2nd promise
