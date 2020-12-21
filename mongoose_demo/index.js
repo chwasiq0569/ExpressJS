@@ -6,26 +6,36 @@ mongoose
   .catch((err) => console.log("Error Occured: ", err));
 
 const courseScheme = new mongoose.Schema({
-  name: String,
+  name: { type: String, required: true },
   author: String,
   tags: [String],
   date: { type: Date, default: Date.now },
   isPublished: Boolean,
+  price: {
+    type: Number,
+    required: function () {
+      return this.isPublished;
+    },
+  },
 });
 
 const Course = mongoose.model("Course", courseScheme);
 
 const createCourse = async () => {
   const course = new Course({
-    name: "Design Pattrens Course",
-    author: "Mosh",
-    tags: ["Design Pattrens", "Development"],
+    name: "MongoDB Course",
+    author: "Ch Wasiq",
+    tags: ["MongoDB", "Development", "Database"],
     // date is set to default
+    price: 127,
     isPublished: true,
   });
-
-  const result = await course.save();
-  console.log("result: ", result);
+  try {
+    const result = await course.save();
+    console.log("result: ", result);
+  } catch (err) {
+    console.log("Err: ", err.message);
+  }
 };
 
 createCourse();
