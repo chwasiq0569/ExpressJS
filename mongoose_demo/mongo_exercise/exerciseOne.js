@@ -82,12 +82,16 @@ const updateCourseUpdateFirst = async (id) => {
   //     }
   //   ); //if is insert isPublished: true iw will update all entries with isPublished: true
   //to get entry that is updated use
-  const result = await Course.findByIdAndUpdate(id, {
-    $set: {
-      author: "Ch Wasiq",
-      isPublished: false,
+  const result = await Course.findByIdAndUpdate(
+    id,
+    {
+      $set: {
+        author: "Ch Wasiq",
+        isPublished: false,
+      },
     },
-  });
+    { new: true }
+  );
   console.log("result: ", result);
 };
 
