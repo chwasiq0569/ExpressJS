@@ -28,4 +28,30 @@ const createCourse = async () => {
   console.log("result: ", result);
 };
 
-createCourse();
+// createCourse();
+
+const getCourses = async () => {
+  //Comparison Operators
+  //gt greaterThan
+  //lt lessThan
+  //gte greaterThan or equals to
+  //lte lessThan or equals to
+  //in (array of values [1,55,4])
+  //nin (not in)
+  //Logical Operators
+  //or
+  //and
+  const courses = await Course
+    // .find({ price: {$gte: 10, $lte: 20} }) // between 10 to 20
+    // .find({ price: {$in: [1,20,25] }) // in [1,55,4]
+    // .find().or([{author: "Mosh"},{isPublished: true}]) // find the course with author == "Mosh" or isPublished: true
+    // .find().and([{author: "Mosh"},{isPublished: true}]) // find the course with author == "Mosh" and isPublished: true
+    //by adding these values in find function we can also get same result as logical AND
+    .find({ author: "Mosh", isPublished: true })
+    .limit(1)
+    .sort({ name: 1 }) //1 indicates ascending order
+    .select({ name: 1, tags: 1 });
+  console.log("course: ", courses);
+};
+
+getCourses();
