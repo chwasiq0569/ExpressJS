@@ -1,0 +1,8 @@
+[
+    {"_id": "5fe02e249ae10318cc9e555e","name": "Design Pattrens Course", "tags" : ["Design Pattrens", "Development"], "author": "Mosh", "isPublished": true},
+    {"_id": "5fe02e092252441cc0b75d2a","name": "Advanced JavaScript Course", "tags" : ["Advanced JavaScript", "Frontend/Backend"], "author": "Mosh", "isPublished": false},
+    {"_id": "5fe02ddbdb214f0f68e8bbb9","name": "ReactJS Course", "tags" : ["ReactJS", "Frontend"], "author": "Mosh", "isPublished": true},
+    {"_id": "5fdeee89f28b2827282cc123","name": "AngularJS Course", "tags" : ["AngularJS", "Frontend"], "author": "Mosh", "isPublished": true},
+    {"_id": "5fdeed775f9b7f03e425385f","name": "NodeJS Course", "tags" : ["NodeJS", "Backend"], "author": "Mosh", "isPublished": true}
+]
+ 

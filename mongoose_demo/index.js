@@ -17,9 +17,9 @@ const Course = mongoose.model("Course", courseScheme);
 
 const createCourse = async () => {
   const course = new Course({
-    name: "AngularJS Course",
+    name: "Design Pattrens Course",
     author: "Mosh",
-    tags: ["Angular", "Frontend"],
+    tags: ["Design Pattrens", "Development"],
     // date is set to default
     isPublished: true,
   });
@@ -28,7 +28,7 @@ const createCourse = async () => {
   console.log("result: ", result);
 };
 
-// createCourse();
+createCourse();
 
 const getCourses = async () => {
   //Comparison Operators
@@ -68,4 +68,4 @@ const getCourses = async () => {
     .count();
   console.log("pagination: ", pagination);
 };
-getCourses();
+// getCourses();
