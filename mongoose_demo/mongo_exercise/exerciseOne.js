@@ -69,4 +69,29 @@ const updateCoursesQueryFirst = async (id) => {
   console.log("updateCoursesQueryFirst: ", updatedCourse);
 };
 
-updateCoursesQueryFirst("5fdeed775f9b7f03e425385f");
+// updateCoursesQueryFirst("5fdeed775f9b7f03e425385f");
+
+const updateCourseUpdateFirst = async (id) => {
+  //   const result = await Course.update(
+  //     { _id: id },
+  //     {
+  //       $set: {
+  //         author: "Ch Wasiq",
+  //         isPublished: false,
+  //       },
+  //     }
+  //   ); //if is insert isPublished: true iw will update all entries with isPublished: true
+  //to get entry that is updated use
+  const result = await Course.findByIdAndUpdate(
+    { _id: id },
+    {
+      $set: {
+        author: "Ch Wasiq",
+        isPublished: false,
+      },
+    }
+  );
+  console.log("result: ", result);
+};
+
+updateCourseUpdateFirst("5fdeed775f9b7f03e425385f");
