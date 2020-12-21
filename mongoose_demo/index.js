@@ -16,6 +16,8 @@ const courseScheme = new mongoose.Schema({
     type: String,
     required: true,
     enum: ["web", "frontend", "backend"], //should be one of these
+    lowercase: true, //mongoose convert it into lowercase
+    trim: true,
   },
   author: String,
   tags: {
@@ -38,6 +40,8 @@ const courseScheme = new mongoose.Schema({
     required: function () {
       return this.isPublished;
     },
+    get: (v) => Math.round(v),
+    set: (v) => Math.round(v),
   },
 });
 
@@ -45,13 +49,13 @@ const Course = mongoose.model("Course", courseScheme);
 
 const createCourse = async () => {
   const course = new Course({
-    name: "ExpressJS Course",
-    author: "Ch Wasiq",
-    tags: [],
+    name: "Python Course",
+    author: "PyTeacher",
+    tags: ["web", "machine learning", "AI"],
     // date is set to default
-    category: "web",
-    price: 277,
+    category: "Backend",
     isPublished: true,
+    price: 889.85,
   });
   try {
     const result = await course.save();

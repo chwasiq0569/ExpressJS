@@ -1,39 +1,60 @@
 const express = require("express");
-const app = express();
+const mongoose = require("mongoose");
+const { v4: uuidv4 } = require("uuid");
+// const app = express();
+// const config = require("config");
+// console.log(`process.env.NODE_ENV: ${process.env.NODE_ENV}`);
+// console.log(`Configuration Name: ${config.get("name")}`);
+// console.log(`Mail Host: ${config.get("mail.host")}`);
+// console.log(`Mail Password: ${config.get("mail.password")}`);
+// ////////////////////////////////////////////////////////////
+// console.log(`app.get('env'): ${app.get("env")}`);
+mongoose
+  .connect("mongodb://localhost/vidly")
+  .then(() => console.log("Mongodb Connected..."))
+  .catch((err) => console.log("Error Occured in connecting db: ", err));
 
-const movies = [
-  {
-    id: 1,
-    movie: "Movies1",
-    genre: "action",
-  },
-  {
-    id: 2,
-    movie: "Movies2",
-    genre: "action",
-  },
-  {
-    id: 3,
-    movie: "Movies3",
-    genre: "romantic",
-  },
-  {
-    id: 4,
-    movie: "Movies4",
-    genre: "romantic",
-  },
-];
+const vidlySchema = new mongoose.Schema({
+  id: String,
+  movie: String,
+  genre: String,
+});
 
-// app.use(express.json()); //middleware
-
-// app.get("/vidly/movies", (req, res) => {
-//   res.send(movies);
-// });
+const Movie = mongoose.model("Movie", vidlySchema);
 
 app.use(express.json()); //middleware
 
-app.get("/api/courses", (req, res) => {
-  res.send(movies);
+// app.get("/vidly/movies", (req, res) => {
+//   const getMovies = async () => {
+//     const movies = Movie.find()
+//       .sort({ id: 1 })
+//       .select({ id: 1, movie: 1, genre: 1 });
+//     console.log("movies: ", movies);
+//   };
+//   // getMovies();
+//   res.send("Hello World");
+// });
+
+// app.post("/vidly/movies", (req, res) => {
+//   const createMovie = async () => {
+//     const movie = new Movie({
+//       id: uuidv4(),
+//       movie: req.body.movie,
+//       genre: req.body.genre,
+//     });
+//     try {
+//       const result = await movie.save();
+//       console.log("Result: ", result);
+//       res.send(result);
+//     } catch (err) {
+//       console.log("Error Occured in Creating Movie: ", err.message);
+//     }
+//   };
+//   createMovie();
+// });
+
+app.get("/myapp/", (req, res) => {
+  res.send("Hello WOrld");
 });
 
 const port = process.env.PORT || 3000;
