@@ -48,10 +48,24 @@ const getCourses = async () => {
     // .find().and([{author: "Mosh"},{isPublished: true}]) // find the course with author == "Mosh" and isPublished: true
     //by adding these values in find function we can also get same result as logical AND
     .find({ author: "Mosh", isPublished: true })
-    .limit(1)
+    .limit(10)
     .sort({ name: 1 }) //1 indicates ascending order
     .select({ name: 1, tags: 1 });
   console.log("course: ", courses);
+  ///counting total dataitems in below record
+  const countCourses = await Course.find({ author: "Mosh", isPublished: true })
+    .limit(10)
+    .sort({ name: 1 }) //1 indicates ascending order
+    .count();
+  console.log("countCourses: ", countCourses);
+  //pagination
+  const pageNumber = 2;
+  const pageSize = 10;
+  const pagination = await Course.find({ author: "Mosh", isPublished: true })
+    .skip((pageNumber - 1) * pageSize)
+    .limit(pageSize)
+    .sort({ name: 1 }) //1 indicates ascending order
+    .count();
+  console.log("pagination: ", pagination);
 };
-
 getCourses();
