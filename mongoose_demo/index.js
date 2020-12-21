@@ -6,9 +6,31 @@ mongoose
   .catch((err) => console.log("Error Occured: ", err));
 
 const courseScheme = new mongoose.Schema({
-  name: { type: String, required: true },
+  name: {
+    type: String,
+    required: true,
+    minlength: 5,
+    maxlength: 255,
+  },
+  category: {
+    type: String,
+    required: true,
+    enum: ["web", "frontend", "backend"], //should be one of these
+  },
   author: String,
-  tags: [String],
+  tags: {
+    type: Array,
+    validate: {
+      isAsync: true,
+      validator: function (v, callback) {
+        setTimeout(() => {
+          const result = v && v.length > 0; //will return true or false
+          callback(result);
+        }, 4000);
+      },
+      message: "A course should have atleast one tag",
+    },
+  },
   date: { type: Date, default: Date.now },
   isPublished: Boolean,
   price: {
@@ -23,18 +45,23 @@ const Course = mongoose.model("Course", courseScheme);
 
 const createCourse = async () => {
   const course = new Course({
-    name: "MongoDB Course",
+    name: "ExpressJS Course",
     author: "Ch Wasiq",
-    tags: ["MongoDB", "Development", "Database"],
+    tags: [],
     // date is set to default
-    price: 127,
+    category: "web",
+    price: 277,
     isPublished: true,
   });
   try {
     const result = await course.save();
     console.log("result: ", result);
   } catch (err) {
-    console.log("Err: ", err.message);
+    for (field in err.errors) {
+      // we are getting the fields taht getting errors
+      // console.log("err.errors[field].message: ", err.errors.tags.message);
+      console.log("err.errors[field].message: ", err.errors[field].message);
+    }
   }
 };
 
