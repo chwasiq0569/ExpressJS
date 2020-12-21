@@ -40,17 +40,33 @@ const Course = mongoose.model("Courses", courseSchema);
 //   console.log("courses: ", courses);
 // };
 // run();
-const getCourses = async () => {
-  return await Course.find({
-    isPublished: true,
-  })
-    .or({ price: { $gte: 15 } }, { name: /.*by.*/i })
-    .sort({ price: -1 }) //we can also ue "-price"
-    .select({ name: 1, author: 1 });
+// const getCourses = async () => {
+//   return await Course.find({
+//     isPublished: true,
+//   })
+//     .or({ price: { $gte: 15 } }, { name: /.*by.*/i })
+//     .sort({ price: -1 }) //we can also ue "-price"
+//     .select({ name: 1, author: 1 });
+// };
+// // getCourses();
+// const run = async () => {
+//   const courses = await getCourses();
+//   console.log("courses: ", courses);
+// };
+// run();
+const updateCoursesQueryFirst = async (id) => {
+  //query first approach
+  const course = await Course.findById(id);
+  if (!course) return;
+
+  course.isPublished = false;
+  course.author = "Wasiq";
+  //or course.set({
+  //     isPublished = false;
+  //     author = "Wasiq"
+  //  })
+  const updatedCourse = await course.save();
+  console.log("updateCoursesQueryFirst: ", updatedCourse);
 };
-// getCourses();
-const run = async () => {
-  const courses = await getCourses();
-  console.log("courses: ", courses);
-};
-run();
+
+updateCoursesQueryFirst("5fdeed775f9b7f03e425385f");
