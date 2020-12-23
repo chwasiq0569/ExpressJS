@@ -2,6 +2,7 @@ const express = require("express");
 const mongoose = require("mongoose");
 const app = express();
 app.use(express.json()); //middleware
+const auth = require("./auth");
 const _ = require("lodash");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
@@ -45,6 +46,11 @@ const userSchema = new mongoose.Schema({
   },
 });
 
+userSchema.methods.generateAuthToken = function () {
+  const token = jwt.sign({ _id: this._id }, config.get("jwtPrivateKey"));
+  return token;
+};
+
 const User = mongoose.model("User", userSchema);
 
 app.get("/register", (req, res) => {
@@ -60,7 +66,7 @@ app.post("/register", (req, res) => {
     user.password = await bcrypt.hash(user.password, salt);
     try {
       await user.save();
-      const token = jwt.sign({ _id: user._id }, config.get("jwtPrivateKey"));
+      const token = user.generateAuthToken();
       res
         .header("x-auth-token", token)
         .send(_.pick(req.body, ["username", "email"]));
@@ -71,8 +77,8 @@ app.post("/register", (req, res) => {
   createUser();
 });
 
-app.post("/login", (req, res) => {
-  const createUser = async () => {
+app.post("/login", auth, (req, res) => {
+  const loginUser = async () => {
     let user = await User.findOne({ email: req.body.email });
     if (!user) res.status(400).send("Invalid email or password...");
     const validPassword = await bcrypt.compare(
@@ -81,10 +87,10 @@ app.post("/login", (req, res) => {
     );
     if (!validPassword) res.status(400).send("Invalid email or password...");
     console.log(validPassword);
-    const token = jwt.sign({ _id: user._id }, config.get("jwtPrivateKey"));
+    const token = user.generateAuthToken();
     res.send(token);
   };
-  createUser();
+  loginUser();
 });
 
 const port = process.env.PORT || 3000;
