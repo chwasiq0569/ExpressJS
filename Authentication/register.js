@@ -60,7 +60,10 @@ app.post("/register", (req, res) => {
     user.password = await bcrypt.hash(user.password, salt);
     try {
       await user.save();
-      res.send(_.pick(req.body, ["username", "email"]));
+      const token = jwt.sign({ _id: user._id }, config.get("jwtPrivateKey"));
+      res
+        .header("x-auth-token", token)
+        .send(_.pick(req.body, ["username", "email"]));
     } catch (err) {
       console.log("Error Occured in Creating New User: ", err.message);
     }
