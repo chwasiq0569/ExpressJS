@@ -53,8 +53,10 @@ userSchema.methods.generateAuthToken = function () {
 
 const User = mongoose.model("User", userSchema);
 
-app.get("/register", (req, res) => {
-  res.send("User");
+app.get("/me", auth, async (req, res) => {
+  console.log("req.user._id: ", req.user._id);
+  const user = await User.findById(req.user._id).select("-password");
+  res.send(user);
 });
 
 app.post("/register", (req, res) => {
