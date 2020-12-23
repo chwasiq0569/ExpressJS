@@ -4,6 +4,15 @@ const app = express();
 app.use(express.json()); //middleware
 const _ = require("lodash");
 const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken");
+const config = require("config");
+
+console.log('config.get("jwtPrivateKey"): ', config.get("jwtPrivateKey"));
+
+if (!config.get("jwtPrivateKey")) {
+  console.error("FATAL ERROR: jwtPrivateKey not defined");
+  process.exit(1);
+}
 
 mongoose
   .connect("mongodb://localhost/auth")
@@ -69,7 +78,8 @@ app.post("/login", (req, res) => {
     );
     if (!validPassword) res.status(400).send("Invalid email or password...");
     console.log(validPassword);
-    res.send(true);
+    const token = jwt.sign({ _id: user._id }, config.get("jwtPrivateKey"));
+    res.send(token);
   };
   createUser();
 });
