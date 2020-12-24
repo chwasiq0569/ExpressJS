@@ -9,6 +9,12 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const config = require("config");
 
+process.on("uncaughtException", (ex) => {
+  console.log("Uncaught Exception: ", ex);
+});
+process.on("unhandledRejection", (ex) => {
+  console.log("Uncaught Rejection: ", ex);
+});
 console.log('config.get("jwtPrivateKey"): ', config.get("jwtPrivateKey"));
 
 if (!config.get("jwtPrivateKey")) {
