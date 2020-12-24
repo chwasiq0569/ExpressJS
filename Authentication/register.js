@@ -1,4 +1,5 @@
 const express = require("express");
+require("express-async-errors");
 const mongoose = require("mongoose");
 const app = express();
 app.use(express.json()); //middleware
